@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajuste de Cuentas - Sistema Contable</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img id="company-logo" src="logo.png" alt="Logo Empresa">
+                <div>
+                    <h1 id="company-name">Ajuste de Cuentas</h1>
+                    <p id="company-info">Sistema Contable Profesional</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <button id="config-btn"><i class="fas fa-cog"></i> Configuración</button>
+                <div class="currency-display">Moneda: Francos CFA (XFA)</div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <ul>
+                    <li class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                    <li data-section="accounting"><i class="fas fa-book"></i> Contabilidad</li>
+                    <li data-section="accounts"><i class="fas fa-list"></i> Plan de Cuentas</li>
+                    <li data-section="reports"><i class="fas fa-file-alt"></i> Reportes</li>
+                    <li data-section="tools"><i class="fas fa-tools"></i> Herramientas</li>
+                </ul>
+            </nav>
+
+            <div class="content-area">
+                <!-- Dashboard -->
+                <section id="dashboard" class="content-section active">
+                    <h2><i class="fas fa-tachometer-alt"></i> Panel Principal</h2>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Balance General</h3>
+                            <div class="card-content" id="balance-general">
+                                Cargando...
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Estado de Resultados</h3>
+                            <div class="card-content" id="estado-resultados">
+                                Cargando...
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Últimos Asientos</h3>
+                            <div class="card-content" id="ultimos-asientos">
+                                Cargando...
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <h3>Resumen Mensual</h3>
+                            <div class="card-content" id="resumen-mensual">
+                                Cargando...
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contabilidad -->
+                <section id="accounting" class="content-section">
+                    <h2><i class="fas fa-book"></i> Contabilidad</h2>
+                    <div class="accounting-tabs">
+                        <button class="tab-btn active" data-tab="new-entry">Nuevo Asiento</button>
+                        <button class="tab-btn" data-tab="view-entries">Ver Asientos</button>
+                        <button class="tab-btn" data-tab="account-balance">Saldos</button>
+                    </div>
+                    
+                    <div class="tab-content active" id="new-entry">
+                        <form id="accounting-entry-form">
+                            <div class="form-group">
+                                <label for="entry-date">Fecha:</label>
+                                <input type="date" id="entry-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="entry-concept">Concepto:</label>
+                                <input type="text" id="entry-concept" required>
+                            </div>
+                            
+                            <div class="entry-lines">
+                                <h4>Líneas del Asiento</h4>
+                                <div class="entry-line">
+                                    <select class="account-select" required>
+                                        <option value="">Seleccione cuenta</option>
+                                        <!-- Las cuentas se cargarán dinámicamente -->
+                                    </select>
+                                    <input type="text" class="debit" placeholder="Debe (XFA)">
+                                    <input type="text" class="credit" placeholder="Haber (XFA)">
+                                    <button type="button" class="remove-line"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" id="add-line-btn">Añadir línea</button>
+                            
+                            <div class="form-actions">
+                                <button type="submit">Guardar Asiento</button>
+                                <button type="reset">Limpiar</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-content" id="view-entries">
+                        <div class="filters">
+                            <input type="date" id="filter-from-date" placeholder="Desde">
+                            <input type="date" id="filter-to-date" placeholder="Hasta">
+                            <input type="text" id="filter-concept" placeholder="Concepto">
+                            <button id="filter-entries-btn">Filtrar</button>
+                        </div>
+                        <div class="entries-list">
+                            <table id="entries-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Número</th>
+                                        <th>Concepto</th>
+                                        <th>Debe (XFA)</th>
+                                        <th>Haber (XFA)</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Los asientos se cargarán dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="account-balance">
+                        <div class="filters">
+                            <select id="balance-account">
+                                <option value="">Todas las cuentas</option>
+                                <!-- Las cuentas se cargarán dinámicamente -->
+                            </select>
+                            <input type="date" id="balance-date" placeholder="Fecha de corte">
+                            <button id="generate-balance-btn">Generar Saldos</button>
+                        </div>
+                        <div class="balance-results">
+                            <table id="balance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Cuenta</th>
+                                        <th>Descripción</th>
+                                        <th>Debe (XFA)</th>
+                                        <th>Haber (XFA)</th>
+                                        <th>Saldo (XFA)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Los saldos se cargarán dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Plan de Cuentas -->
+                <section id="accounts" class="content-section">
+                    <h2><i class="fas fa-list"></i> Plan General de Cuentas</h2>
+                    <div class="accounts-controls">
+                        <input type="text" id="search-account" placeholder="Buscar cuenta...">
+                        <button id="export-accounts-excel"><i class="fas fa-file-excel"></i> Excel</button>
+                        <button id="export-accounts-pdf"><i class="fas fa-file-pdf"></i> PDF</button>
+                    </div>
+                    <div class="accounts-tree">
+                        <ul id="accounts-list">
+                            <!-- Las cuentas se cargarán dinámicamente -->
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Reportes -->
+                <section id="reports" class="content-section">
+                    <h2><i class="fas fa-file-alt"></i> Reportes</h2>
+                    <div class="reports-grid">
+                        <div class="report-card" data-report="balance-general">
+                            <i class="fas fa-balance-scale"></i>
+                            <h3>Balance General</h3>
+                            <p>Genera el balance general de la empresa</p>
+                        </div>
+                        <div class="report-card" data-report="estado-resultados">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Estado de Resultados</h3>
+                            <p>Muestra ganancias y pérdidas del período</p>
+                        </div>
+                        <div class="report-card" data-report="mayor">
+                            <i class="fas fa-book"></i>
+                            <h3>Libro Mayor</h3>
+                            <p>Detalle de movimientos por cuenta</p>
+                        </div>
+                        <div class="report-card" data-report="diario">
+                            <i class="fas fa-book-open"></i>
+                            <h3>Libro Diario</h3>
+                            <p>Registro cronológico de asientos</p>
+                        </div>
+                    </div>
+                    <div class="report-options">
+                        <div class="form-group">
+                            <label for="report-from-date">Desde:</label>
+                            <input type="date" id="report-from-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="report-to-date">Hasta:</label>
+                            <input type="date" id="report-to-date">
+                        </div>
+                        <button id="generate-report-btn">Generar Reporte</button>
+                    </div>
+                    <div id="report-preview">
+                        <!-- Vista previa del reporte -->
+                    </div>
+                    <div class="report-actions">
+                        <button id="export-report-pdf"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
+                        <button id="export-report-excel"><i class="fas fa-file-excel"></i> Exportar Excel</button>
+                    </div>
+                </section>
+
+                <!-- Herramientas -->
+                <section id="tools" class="content-section">
+                    <h2><i class="fas fa-tools"></i> Herramientas</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card" data-tool="backup">
+                            <i class="fas fa-database"></i>
+                            <h3>Copia de Seguridad</h3>
+                            <p>Realiza backup de toda la información</p>
+                        </div>
+                        <div class="tool-card" data-tool="restore">
+                            <i class="fas fa-undo"></i>
+                            <h3>Restaurar</h3>
+                            <p>Recupera datos desde un backup</p>
+                        </div>
+                        <div class="tool-card" data-tool="import">
+                            <i class="fas fa-file-import"></i>
+                            <h3>Importar Datos</h3>
+                            <p>Carga información desde archivos</p>
+                        </div>
+                        <div class="tool-card" data-tool="export">
+                            <i class="fas fa-file-export"></i>
+                            <h3>Exportar Datos</h3>
+                            <p>Extrae información a archivos</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configuración -->
+    <div id="config-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2><i class="fas fa-cog"></i> Configuración de la Empresa</h2>
+            <form id="company-config-form">
+                <div class="form-group">
+                    <label for="company-name-input">Nombre de la Empresa:</label>
+                    <input type="text" id="company-name-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="company-phone">Teléfono:</label>
+                    <input type="tel" id="company-phone">
+                </div>
+                <div class="form-group">
+                    <label for="company-email">Email:</label>
+                    <input type="email" id="company-email">
+                </div>
+                <div class="form-group">
+                    <label for="company-logo">Logo:</label>
+                    <input type="file" id="company-logo" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="company-address">Dirección:</label>
+                    <textarea id="company-address" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="company-nif">NIF/CIF:</label>
+                    <input type="text" id="company-nif">
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Guardar Configuración</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="lib/jspdf.min.js"></script>
+    <script src="lib/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
